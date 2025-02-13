@@ -1,0 +1,62 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                std::swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int n;
+    std::cout << "Введите количество элементов: ";
+    std::cin >> n;
+
+    int* easy = new int[n];  // Массив по возрастанию
+    int* hard = new int[n];  // Массив по убыванию
+    int* medium = new int[n]; // Рандомный массив
+
+    srand(time(0));
+
+    // Заполняем массивы
+    for (int i = 0; i < n; i++) {
+        easy[i] = i + 1;             // 1, 2, 3, ...
+        hard[i] = n - i;             // n, n-1, n-2, ...
+        medium[i] = rand() % 100;    // Случайные числа от 0 до 99
+    }
+
+    // Выводим оригинальные массивы
+    std::cout << "\nИсходные массивы:\n";
+    std::cout << "Легкий: "; printArray(easy, n);
+    std::cout << "Сложный: "; printArray(hard, n);
+    std::cout << "Средний: "; printArray(medium, n);
+
+    // Сортируем массивы
+    bubbleSort(easy, n);
+    bubbleSort(hard, n);
+    bubbleSort(medium, n);
+
+    // Выводим отсортированные массивы
+    std::cout << "\nПосле пузырьковой сортировки:\n";
+    std::cout << "Легкий: "; printArray(easy, n);
+    std::cout << "Сложный: "; printArray(hard, n);
+    std::cout << "Средний: "; printArray(medium, n);
+
+    delete[] easy;
+    delete[] hard;
+    delete[] medium;
+
+    return 0;
+}
