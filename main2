@@ -1,7 +1,98 @@
+//#include <iostream>
+//#include <cstdlib>
+//#include <ctime>
+//#include <fstream>
+//
+//using namespace std;
+//
+//int bubbleSort(int arr[], int n) {
+//    int operations = 0; 
+//
+//    for (int i = 0; i < n - 1; i++) {
+//        for (int j = 0; j < n - i - 1; j++) {
+//            
+//            if (arr[j] > arr[j + 1]) {
+//                int temp = arr[j];
+//                arr[j] = arr[j + 1];
+//                arr[j + 1] = temp;
+//
+//                operations += 3; 
+//            }
+//            operations++; 
+//        }
+//    }
+//    return operations;
+//}
+//
+//void printArray(int arr[], int n) {
+//    for (int i = 0; i < n; i++) {
+//        cout << arr[i] << " ";
+//    }
+//    cout << endl;
+//}
+//
+//int main() {
+//    setlocale(LC_ALL, "ru");
+//
+//    int n;
+//    cout << "Введите n: ";
+//    cin >> n;
+//
+//    int* easy = new int[n];  
+//    int* hard = new int[n];  
+//    int* medium = new int[n];
+//
+//    srand(time(0));
+//
+//   
+//    for (int i = 0; i < n; i++) {
+//        easy[i] = i + 1;             
+//        hard[i] = n - i;            
+//        medium[i] = rand() % 100;    
+//    }
+//
+//   
+//    cout << "\nИсходные массивы:\n";
+//    cout << "Легкий: "; printArray(easy, n);
+//    cout << "Сложный: "; printArray(hard, n);
+//    cout << "Средний: "; printArray(medium, n);
+//
+//    
+//    ofstream outFile("operations.txt");
+//
+//    
+//    int easyOps = bubbleSort(easy, n);
+//    int hardOps = bubbleSort(hard, n);
+//    int mediumOps = bubbleSort(medium, n);
+//
+//    
+//    cout << "\nПосле пузырьковой сортировки:\n";
+//    cout << "Легкий: "; printArray(easy, n);
+//    cout << "Сложный: "; printArray(hard, n);
+//    cout << "Средний: "; printArray(medium, n);
+//
+//   
+//    if (outFile.is_open()) {
+//        outFile << "Количество операций:\n";
+//        outFile << "Легкий: " << easyOps << "\n";
+//        outFile << "Сложный: " << hardOps << "\n";
+//        outFile << "Средний: " << mediumOps << "\n";
+//        outFile.close();
+//        cout << "\nРезультаты записаны в файл operations.txt\n";
+//    }
+//    else {
+//        cout << "\nОшибка записи в файл!\n";
+//    }
+//
+//
+//    return 0;
+//}
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -30,9 +121,9 @@ int main() {
     srand(time(0)); // инициализация генератора случайных чисел
 
     // Открываем файл для записи результатов
-    ofstream outFile("results.txt");
+    ofstream outFile("results2.txt");
     if (!outFile.is_open()) {
-        cout << "Ошибка открытия файла results.txt" << endl;
+        cout << "Ошибка открытия файла results2.txt" << endl;
         return 1;
     }
 
@@ -59,7 +150,8 @@ int main() {
 
         // Вычисление среднего количества операций для данного n
         double meanOps = static_cast<double>(totalOps) / experiments;
-        outFile << n << " " << meanOps << endl;
+        outFile <<fixed <<setprecision(2) << n << " " << meanOps << endl;
+        cout << fixed << setprecision(2);
         cout << "n = " << n << " T_mean(n) = " << meanOps << endl;
     }
 
