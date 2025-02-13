@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+
+using namespace std;
+
+// Функция пузырьковой сортировки с подсчетом операций:
+// - каждое сравнение (if) считается как 1 операция
+// - каждый обмен (через временную переменную) считается как 3 операции присваивания
+int bubbleSort(int arr[], int n) {
+    int operations = 0;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            operations++; // операция сравнения
+            if (arr[j] > arr[j + 1]) {
+                // Обмен элементов без использования swap()
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                operations += 3; // три присваивания при обмене
+            }
+        }
+    }
+    return operations;
+}
+
+int main() {
+    setlocale(LC_ALL, "ru");
+    srand(time(0)); // инициализация генератора случайных чисел
+
+    // Открываем файл для записи результатов
+    ofstream outFile("results.txt");
+    if (!outFile.is_open()) {
+        cout << "Ошибка открытия файла results.txt" << endl;
+        return 1;
+    }
+
+    int experiments = 1000; // количество экспериментов для каждого n
+    outFile << "n T_mean(n)" << endl;
+
+    // Внешний цикл по n (от 100 до 1000 с шагом 100)
+    for (int n = 100; n <= 1000; n += 100) {
+        long long totalOps = 0; // суммарное число операций для данного n
+
+        // Внутренний цикл: k экспериментов для данного размера массива
+        for (int k = 0; k < experiments; k++) {
+            int* arr = new int[n];
+            // Инициализация случайного массива (числа от 0 до 99)
+            for (int i = 0; i < n; i++) {
+                arr[i] = rand() % 100;
+            }
+
+            // Сортировка и подсчет операций
+            totalOps += bubbleSort(arr, n);
+
+            delete[] arr;
+        }
+
+        // Вычисление среднего количества операций для данного n
+        double meanOps = static_cast<double>(totalOps) / experiments;
+        outFile << n << " " << meanOps << endl;
+        cout << "n = " << n << " T_mean(n) = " << meanOps << endl;
+    }
+
+    outFile.close();
+    return 0;
+}
