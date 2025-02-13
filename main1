@@ -1,32 +1,41 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 
-void bubbleSort(int arr[], int n) {
+using namespace std;
+
+int bubbleSort(int arr[], int n) {
+    int operations = 0; // Счетчик операций
+
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
+            operations++; // Увеличиваем счетчик на каждое сравнение
             if (arr[j] > arr[j + 1]) {
-                std::swap(arr[j], arr[j + 1]);
+                swap(arr[j], arr[j + 1]);
+                operations++; // Увеличиваем счетчик на каждую перестановку
             }
         }
     }
+    return operations;
 }
 
 void printArray(int arr[], int n) {
     for (int i = 0; i < n; i++) {
-        std::cout << arr[i] << " ";
+        cout << arr[i] << " ";
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 int main() {
     setlocale(LC_ALL, "ru");
-    int n;
-    std::cout << "введите n: ";
-    std::cin >> n;
 
-    int* easy = new int[n];  // Массив по возрастанию
-    int* hard = new int[n];  // Массив по убыванию
+    int n;
+    cout << "Введите n: ";
+    cin >> n;
+
+    int* easy = new int[n];   // Массив по возрастанию
+    int* hard = new int[n];   // Массив по убыванию
     int* medium = new int[n]; // Рандомный массив
 
     srand(time(0));
@@ -38,24 +47,42 @@ int main() {
         medium[i] = rand() % 100;    // Случайные числа от 0 до 99
     }
 
-    // Выводим оригинальные массивы
-    std::cout << "\nИсходные массивы:\n";
-    std::cout << "Легкий: "; printArray(easy, n);
-    std::cout << "Сложный: "; printArray(hard, n);
-    std::cout << "Средний: "; printArray(medium, n);
+    // Выводим исходные массивы
+    cout << "\nИсходные массивы:\n";
+    cout << "Легкий: "; printArray(easy, n);
+    cout << "Сложный: "; printArray(hard, n);
+    cout << "Средний: "; printArray(medium, n);
 
-    // Сортируем массивы
-    bubbleSort(easy, n);
-    bubbleSort(hard, n);
-    bubbleSort(medium, n);
+    // Открываем файл для записи количества операций
+    ofstream outFile("operations.txt");
+
+    // Сортируем массивы и записываем количество операций
+    int easyOps = bubbleSort(easy, n);
+    int hardOps = bubbleSort(hard, n);
+    int mediumOps = bubbleSort(medium, n);
 
     // Выводим отсортированные массивы
-    std::cout << "\nПосле пузырьковой сортировки:\n";
-    std::cout << "Легкий: "; printArray(easy, n);
-    std::cout << "Сложный: "; printArray(hard, n);
-    std::cout << "Средний: "; printArray(medium, n);
+    cout << "\nПосле пузырьковой сортировки:\n";
+    cout << "Легкий: "; printArray(easy, n);
+    cout << "Сложный: "; printArray(hard, n);
+    cout << "Средний: "; printArray(medium, n);
 
+    // Записываем результаты в файл
+    if (outFile.is_open()) {
+        outFile << "Количество операций:\n";
+        outFile << "Легкий: " << easyOps << "\n";
+        outFile << "Сложный: " << hardOps << "\n";
+        outFile << "Средний: " << mediumOps << "\n";
+        outFile.close();
+        cout << "\nРезультаты записаны в файл operations.txt\n";
+    } else {
+        cout << "\nОшибка записи в файл!\n";
+    }
 
+    // Освобождаем память
+    delete[] easy;
+    delete[] hard;
+    delete[] medium;
 
     return 0;
 }
